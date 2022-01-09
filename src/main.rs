@@ -1,14 +1,10 @@
 #[macro_use]
 extern crate lazy_static;
-
 extern crate base64;
 
 use std::sync::RwLock;
-
 use clap::{arg, App, AppSettings};
-use arboard::Clipboard;
-use arboard::ImageData;
-
+use arboard::{Clipboard, ImageData};
 use clipboard_master::{Master, ClipboardHandler, CallbackResult};
 use std::{fs, io};
 
