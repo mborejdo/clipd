@@ -10,5 +10,4 @@ clipboard-master = "*"
 arboard = "*"
 clap = { version = "3.0.5", features = ["derive"] }
 lazy_static = "*"
-base64 = "*"
 image = "*"

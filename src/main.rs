@@ -1,7 +1,5 @@
 #[macro_use]
 extern crate lazy_static;
-extern crate base64;
-
 use std::sync::RwLock;
 use clap::{arg, App, AppSettings};
 use arboard::{Clipboard, ImageData};
@@ -35,12 +33,8 @@ fn write_text_clip(data: String) -> Result<(), io::Error> {
 
 fn write_image_clip(data: ImageData) -> Result<(), io::Error> {
     let path = GLOBAL_STRING.read().unwrap();
-    let filename = "img";
-    let fh = fs::write(format!("{}{}_{}_{}_rgba", path, filename, data.width, data.height), base64::encode(&data.bytes));
-    match fh {
-        Ok(file) => file,
-        Err(_error) => eprintln!("Problem opening the file: {:?}", filename),
-    };
+    let filename = "img.png";
+    image::save_buffer(format!("{}{}", path, filename), &data.bytes, data.width as u32, data.height as u32, image::ColorType::Rgba8).unwrap();
 
     Ok(())
 }
