@@ -10,7 +10,9 @@ impl ClipboardHandler for Handler {
         println!("Clipboard change happened!");
         let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
         let r = ctx.get_contents();
-        
+        let path = "C:\\Users\\mib\\.dotfiles\\clip\\clips\\";
+        let max = 65;
+
         if r.is_ok() {
             let content = r.unwrap()
                     .replace(&[' ',  '/', '\\', '\"', '.', ';', ':', '\''][..], "_")
@@ -18,8 +20,6 @@ impl ClipboardHandler for Handler {
                     .replace('\n', "")
                     .replace('\r', "");
 
-            let path = "C:\\Users\\mib\\.dotfiles\\clip\\clips\\";
-            let max = 50;
             let filename = if content.len() > max { &content[0..max] } else { &content };
 
             let fsw = fs::write(format!("{}{}", path, filename), content.clone());
