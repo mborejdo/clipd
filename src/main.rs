@@ -13,7 +13,7 @@ impl ClipboardHandler for Handler {
         
         if r.is_ok() {
             let content = r.unwrap()
-                    .replace(&[' ', '\\', '\"', '.', ';', ':', '\''][..], "_")
+                    .replace(&[' ',  '/', '\\', '\"', '.', ';', ':', '\''][..], "_")
                     .replace(|c: char| !c.is_ascii(), "_")
                     .replace('\n', "")
                     .replace('\r', "");
