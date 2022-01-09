@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 clipboard-master = "*"
 clipboard = "*"
+clap = { version = "3.0.5", features = ["derive"] }
