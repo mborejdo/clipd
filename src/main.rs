@@ -25,7 +25,7 @@ impl ClipboardHandler for Handler {
             let fsw = fs::write(format!("{}{}", path, filename), content.clone());
             match fsw {
                 Ok(file) => file,
-                Err(error) => eprintln!("Problem opening the file: {:?}", error),
+                Err(_error) => eprintln!("Problem opening the file: {:?}", filename),
             };
         }
 
@@ -39,5 +39,6 @@ impl ClipboardHandler for Handler {
 }
 
 fn main() {
+    println!("{}", "Started clipd");
     let _ = Master::new(Handler).run();
 }
