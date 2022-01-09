@@ -1,10 +1,14 @@
 #[macro_use]
 extern crate lazy_static;
 
+extern crate base64;
+
 use std::sync::RwLock;
 
 use clap::{arg, App, AppSettings};
-use clipboard::{ClipboardContext, ClipboardProvider};
+use arboard::Clipboard;
+use arboard::ImageData;
+
 use clipboard_master::{Master, ClipboardHandler, CallbackResult};
 use std::{fs, io};
 
@@ -14,7 +18,7 @@ lazy_static! {
     static ref GLOBAL_STRING: RwLock<String> = RwLock::new("./".to_string());
 }
 
-fn write_message(data: String) -> io::Result<()> {
+fn write_text_clip(data: String) -> Result<(), io::Error> {
     let max = 65;
     let content = data
         .replace(&[' ', '/',  '<', '>', '{', '}', '?', ',', '\\', '\"', '.', ';', ':', '\''][..], "_")
@@ -29,24 +33,31 @@ fn write_message(data: String) -> io::Result<()> {
         Ok(file) => file,
         Err(_error) => eprintln!("Problem opening the file: {:?}", filename),
     };
-  
+
+    Ok(())
+}
+
+fn write_image_clip(data: ImageData) -> Result<(), io::Error> {
+    let path = GLOBAL_STRING.read().unwrap();
+    let filename = "_img";
+    let fh = fs::write(format!("{}{}{}", path,  "_", filename), base64::encode_config(&data.bytes, base64::URL_SAFE));
+    match fh {
+        Ok(file) => file,
+        Err(_error) => eprintln!("Problem opening the file: {:?}", filename),
+    };
 
     Ok(())
 }
 
 impl ClipboardHandler for Handler {
     fn on_clipboard_change(&mut self) -> CallbackResult {
-
-        let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
-        let clipboard_contents = ctx.get_contents();
-        if clipboard_contents.is_ok() {
-           
-            let written = write_message(clipboard_contents.unwrap());
-            match written {
-                Ok(()) => println!("Clipboard change happened!"),
-                Err(error) => eprintln!("Problem writing to {:?}", error),
-            };
-        }
+        let mut clipboard = Clipboard::new().unwrap();
+        match clipboard.get_text() {
+            Ok(txt) => write_text_clip(txt),
+            Err(_error) => {
+                write_image_clip(clipboard.get_image().unwrap())
+            },
+        };
 
         CallbackResult::Next
     }
@@ -59,8 +70,6 @@ impl ClipboardHandler for Handler {
 }
 
 fn main() {
-    println!("{}", "Started clipd");
-
     let matches = App::new("clipd")
         .about("clipboard awesomeness")
         .setting(AppSettings::SubcommandRequiredElseHelp)
@@ -84,8 +93,9 @@ fn main() {
             {
                 let mut path = GLOBAL_STRING.write().unwrap();
                     *path = paths.to_string();
+                println!("{} {}", "Started clipd with path", path);
             }
-            
+
             let runner = Master::new(Handler).run();
             match runner {
                 Ok(()) => println!("Runner OK"),
