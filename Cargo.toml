@@ -9,3 +9,4 @@ edition = "2021"
 clipboard-master = "*"
 clipboard = "*"
 clap = { version = "3.0.5", features = ["derive"] }
+lazy_static = "*"

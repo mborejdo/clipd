@@ -110,6 +110,7 @@ dependencies = [
  "clap",
  "clipboard",
  "clipboard-master",
+ "lazy_static",
 ]
 
 [[package]]
