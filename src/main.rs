@@ -22,10 +22,8 @@ fn write_message(data: String) -> io::Result<()> {
         .replace('\n', "")
         .replace('\r', "");
 
-    {
-        let filename = if content.len() > max { &content[0..max] } else { &content };
-        let path = GLOBAL_STRING.read().unwrap();
-    }
+    let filename = if content.len() > max { &content[0..max] } else { &content };
+    let path = GLOBAL_STRING.read().unwrap();
     let fh = fs::write(format!("{}{}{}", path,  "_", filename), data.clone());
     match fh {
         Ok(file) => file,
