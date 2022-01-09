@@ -39,8 +39,8 @@ fn write_text_clip(data: String) -> Result<(), io::Error> {
 
 fn write_image_clip(data: ImageData) -> Result<(), io::Error> {
     let path = GLOBAL_STRING.read().unwrap();
-    let filename = "_img";
-    let fh = fs::write(format!("{}{}{}", path,  "_", filename), base64::encode_config(&data.bytes, base64::URL_SAFE));
+    let filename = "img";
+    let fh = fs::write(format!("{}{}_{}_{}_rgba", path, filename, data.width, data.height), base64::encode_config(&data.bytes, base64::URL_SAFE));
     match fh {
         Ok(file) => file,
         Err(_error) => eprintln!("Problem opening the file: {:?}", filename),
