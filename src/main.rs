@@ -43,9 +43,12 @@ impl ClipboardHandler for Handler {
     fn on_clipboard_change(&mut self) -> CallbackResult {
         let mut clipboard = Clipboard::new().unwrap();
         match clipboard.get_text() {
-            Ok(txt) => write_text_clip(txt),
+            Ok(txt) => write_text_clip(txt).expect("Error Clip"),
             Err(_error) => {
-                write_image_clip(clipboard.get_image().unwrap())
+                match clipboard.get_image() {
+                    Ok(img) => write_image_clip(img).expect("Error Clip"),
+                    Err(error) => println!("{:?}", error)
+                }
             },
         };
 
