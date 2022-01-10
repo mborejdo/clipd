@@ -47,7 +47,7 @@ impl ClipboardHandler for Handler {
             Err(_error) => {
                 match clipboard.get_image() {
                     Ok(img) => write_image_clip(img).expect("Error Clip"),
-                    Err(error) => println!("{:?}", error)
+                    Err(error) => eprintln!("{:?}", error)
                 }
             },
         };
