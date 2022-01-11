@@ -15,7 +15,7 @@ lazy_static! {
 fn write_text_clip(data: String) -> Result<(), io::Error> {
     let max = 65;
     let content = data
-        .replace(&[' ', '/',  '<', '>', '{', '}', '?', ',', '\\', '\"', '.', ';', ':', '\''][..], "_")
+        .replace(&[' ', '/',  '<', '>', '|', '{', '}', '?', ',', '\\', '\"', '.', ';', ':', '\''][..], "_")
         .replace(|c: char| !c.is_ascii(), "_")
         .replace('\n', "")
         .replace('\r', "");
@@ -64,14 +64,14 @@ impl ClipboardHandler for Handler {
 
 fn main() {
     let matches = App::new("clipd")
-        .about("clipboard awesomeness")
+        .about("clipboard daemon awesomeness")
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .setting(AppSettings::AllowExternalSubcommands)
         .subcommand(
             App::new("run")
-                .about("run things")
+                .about("run daemon")
                 .setting(AppSettings::ArgRequiredElseHelp)
-                .arg(arg!(<PATH> ... "Stuff to run")),
+                .arg(arg!(<PATH> ... "path to store clips")),
         )
         .get_matches();
 
