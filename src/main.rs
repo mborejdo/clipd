@@ -15,9 +15,10 @@ lazy_static! {
 fn write_text_clip(data: String) -> Result<(), io::Error> {
     let max = 65;
     let content = data
-        .replace(&[' ', '/',  '<', '>', '|', '{', '}', '?', ',', '\\', '\"', '.', ';', ':', '\''][..], "_")
+        .replace(&[' ', '/',  '<', '>', '|', '*', '{', '}', '?', ',', '\\', '\"', '.', ';', ':', '\''][..], "_")
         .replace(|c: char| !c.is_ascii(), "_")
         .replace('\n', "")
+        .replace('\t', "")
         .replace('\r', "");
 
     let filename = if content.len() > max { &content[0..max] } else { &content };
