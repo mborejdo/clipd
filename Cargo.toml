@@ -8,6 +8,12 @@ edition = "2021"
 [dependencies]
 clipboard-master = "*"
 arboard = "*"
+dirs = "2.0"
+config = { version = "0.10", default-features=false, features = ['yaml'] }
 clap = { version = "3.0.5", features = ["derive"] }
 lazy_static = "*"
 image = "*"
+
+[dependencies.winapi]
+version = "0.3"
+features = ["winuser", "wingdi", "libloaderapi", "errhandlingapi", "shellapi", "winreg"]
