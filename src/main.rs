@@ -1,15 +1,10 @@
 #[macro_use]
 extern crate lazy_static;
-use std::sync::{RwLock, Arc, Mutex};
+use std::sync::{RwLock};
 use clap::{arg, App, AppSettings};
 use arboard::{Clipboard, ImageData};
 use clipboard_master::{Master, ClipboardHandler, CallbackResult};
 use std::{fs, io};
-
-use crate::tray::spawn_sys_tray;
-
-mod tray;
-mod config;
 
 struct Handler;
 
@@ -23,7 +18,7 @@ macro_rules! str_to_wide {
 }
 
 lazy_static! {
-    static ref CONFIG: Arc<Mutex<config::Config>> = Arc::new(Mutex::new(config::load_config()));
+   // static ref CONFIG: Arc<Mutex<config::Config>> = Arc::new(Mutex::new(config::load_config()));
     static ref GLOBAL_STRING: RwLock<String> = RwLock::new("./".to_string());
 }
 
@@ -80,9 +75,9 @@ impl ClipboardHandler for Handler {
 
 fn main() {
  
-    unsafe {
-        spawn_sys_tray();
-    }
+    //unsafe {
+    //    spawn_sys_tray();
+    //}
 
     let matches = App::new("clipd")
         .about("clipboard daemon awesomeness")
